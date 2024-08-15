@@ -18,7 +18,6 @@ class Node(AbstractNode):
 
 
 class Leaf(AbstractNode):
-    x = None
 
     def __init__(self,x):
         self.x = x

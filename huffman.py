@@ -6,15 +6,22 @@ class Encoder:
 
     srcNode = None
 
-    def __init__(self,pair = dict) -> None:
-        self.originalProbs = pair.values()
-        self.originalKeys  = pair.keys()
+    def generate_probs(self,stats = dict):
+        # unicode to frequency listing.
+        probs = {}
+        totalFrequency = sum(stats.values())
+        for k,v in stats.items():
+            probs[Leaf(k)] = v/totalFrequency
+
+        print(sum(probs.values()))
+        return probs
 
 
 
-    def buildTree(self):
-        currentNodes = list(self.originalKeys)
-        currentProbs = list(self.originalProbs)
+
+    def build_tree(self, originalKeys, originalProbs):
+        currentNodes = list(originalKeys)
+        currentProbs = list(originalProbs)
         while True:
             upper_index_min = np.argmin(currentProbs)
             upperProb = currentProbs.pop(upper_index_min)
@@ -39,7 +46,7 @@ class Encoder:
 
     # requires srcNode to be set
     # generates and adds encoding to each node until leaf with accumulator
-    def generateEncoding(self):
+    def generate_encoding(self):
         assert self.srcNode != None
         leaves = list()
         remainingNodes = list()
@@ -59,6 +66,13 @@ class Encoder:
             remainingNodes.append(curNode.upperChild)
             remainingNodes.append(curNode.lowerChild)
 
+        return leaves
+    
+
+    def encode():
+        pass
+        # encodes given file into sequence of proper bits
+
 
 
 class Shannon:
@@ -70,7 +84,7 @@ class Shannon:
 
         return ent
     
-    def expectedLength(codeProbs = dict):
+    def expected_length(codeProbs = dict):
         encodings = codeProbs.keys()
         l = 0
         for e in encodings:
@@ -82,32 +96,5 @@ class Shannon:
 
 
 
-Leafa = Leaf("a")
-Leafb = Leaf("b")
-Leafc = Leaf("c")
-leafd = Leaf("d")
-leafe = Leaf("c")
-leaff = Leaf("f")
-leafj = Leaf("j")
 
-init_pair = {
-    Leafa: 0.5,
-    Leafb: 0.10,
-    Leafc: 0.10,
-    leafd: 0.05, 
-    leafe: 0.15,
-    leaff: 0.08,
-    leafj: 0.02,
-}
-
-
-
-encoder = Encoder(init_pair)
-encoder.buildTree()
-encoder.generateEncoding()
-
-
-
-print(Shannon.entropy(init_pair.values()))
-print(Shannon.expectedLength(init_pair))
 
