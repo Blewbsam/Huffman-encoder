@@ -73,6 +73,10 @@ class Encoder:
         pass
         # encodes given file into sequence of proper bits
 
+    
+
+
+
 
 
 class Shannon:

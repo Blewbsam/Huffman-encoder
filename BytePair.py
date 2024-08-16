@@ -60,6 +60,9 @@ class BytePair:
         self.PairToToken = merges
         self.TokenToPair = {v:k for k,v in merges.items()}
         return tokens
+    
+
+    
 
 
 
