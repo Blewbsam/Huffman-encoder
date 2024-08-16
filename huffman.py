@@ -71,12 +71,6 @@ class HuffmanEncoder:
 
         return leaves
 
-    
-
-
-
-
-
 class Shannon:
 
     def entropy(probs = list):
@@ -94,10 +88,3 @@ class Shannon:
             l += len(e.encoding) * codeProbs[e]
         
         return l
-
-
-
-
-
-
-

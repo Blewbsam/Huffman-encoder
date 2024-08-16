@@ -7,6 +7,7 @@ class main:
         self.bp =  BytePair() 
         self.encoder = HuffmanEncoder()
         self.leaves = None
+        self.probs = None
         self.bitToSeq = {}
         self.seqToBit = {}
 
@@ -16,16 +17,14 @@ class main:
         with open(src,'r') as some:
             file = some.read()
 
-        tokens = self.bp.tokenize(file,300)
+        tokens = self.bp.tokenize(file,500)
         stats = self.bp.get_single_stats(tokens)
 
-        probs = HuffmanEncoder().generate_probs(stats)
+        self.probs = HuffmanEncoder().generate_probs(stats)
 
-        self.encoder.build_tree(probs.keys(),probs.values())
+        self.encoder.build_tree(self.probs.keys(),self.probs.values())
         self.leaves = self.encoder.generate_encoding()
         
-        for l in self.leaves: #l.x , l.encoding
-            print(f"For {l.x} we have encoding {l.encoding}")
 
 
     def set_lookup_table(self):
@@ -45,24 +44,35 @@ class main:
                         unicodes.insert(0,bi1)
                     except:
                         print(curUnicode, " not found in TokenToPair.")
+                        primaryUnicodes.append(0)
             self.bitToSeq[l.encoding] = "".join(list(map(chr,primaryUnicodes)))
         self.seqToBit = {v:k for k,v in self.bitToSeq.items()}
 
 
     
-    def encode(self,file):
+    def encode(self,src):
+        with open(src,'r') as f:
+            file = list(f.read())
+        
+
         binary = ""
         curString = ""
         max_index = len(file)
         i = 0
+        runTime = 0
         while i < max_index:
-            curString += file[i]
+            addition = file[i]
+            # if ord(addition) > 1000:
+            #     addition = ""
+            curString += addition
             if curString in self.seqToBit.keys():
                 binary += self.seqToBit[curString]
                 curString = ""
 
             i += 1
+            runTime += 1
         
+        print(curString)
         return binary
 
 
@@ -80,18 +90,28 @@ class main:
             i += 1
         
         return sequence
+    
 
+    def getBytePairEntropy(self):
+        return Shannon.entropy(self.probs.values())
+
+    def getExpectedLength(self):
+        pass
 
 
 if __name__ == "__main__":
     m = main()
     m.generate_encoding(src="some.txt")
     m.set_lookup_table()
-    with open("some.txt",'r') as some:
-        file = some.read()
-        binary = m.encode(file)
-        print(binary)
-        print(m.decode(binary))
+    print(m.seqToBit.keys())
+    print(len(m.seqToBit.keys()))
+    binary = m.encode("some.txt")
+    print(binary)
+    print(m.decode(binary))
+
+
+
+    print(m.getBytePairEntropy())
 
 
 
