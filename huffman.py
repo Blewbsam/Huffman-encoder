@@ -2,12 +2,12 @@ import numpy as np
 from Nodes import Node, Leaf
 
 
-class Encoder:
+class HuffmanEncoder:
 
     srcNode = None
 
     def generate_probs(self,stats = dict):
-        # unicode to frequency listing.
+        # turns frequency to probs
         probs = {}
         totalFrequency = sum(stats.values())
         for k,v in stats.items():
@@ -20,6 +20,7 @@ class Encoder:
 
 
     def build_tree(self, originalKeys, originalProbs):
+        # uses Huffman tree 
         currentNodes = list(originalKeys)
         currentProbs = list(originalProbs)
         while True:
@@ -44,9 +45,11 @@ class Encoder:
         assert currentProbs[0] == 1 # total prob must add upto one
         self.srcNode = currentNodes[0]
 
-    # requires srcNode to be set
-    # generates and adds encoding to each node until leaf with accumulator
+
     def generate_encoding(self):
+        # requires srcNode to be set
+        # generates and adds encoding to each node until leaf with accumulator
+        # thus implementing Huffman algorithm
         assert self.srcNode != None
         leaves = list()
         remainingNodes = list()
@@ -67,11 +70,6 @@ class Encoder:
             remainingNodes.append(curNode.lowerChild)
 
         return leaves
-    
-
-    def encode():
-        pass
-        # encodes given file into sequence of proper bits
 
     
 
@@ -82,6 +80,7 @@ class Encoder:
 class Shannon:
 
     def entropy(probs = list):
+        # calculates list based on Shannon information
         ent = 0
         for p in probs:
             ent += p * np.log2(1/p)

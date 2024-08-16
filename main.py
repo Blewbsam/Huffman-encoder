@@ -1,11 +1,11 @@
 from BytePair import BytePair
-from huffman import Encoder, Shannon
+from huffman import HuffmanEncoder, Shannon
 
 
 class main:
     def __init__(self) -> None:
         self.bp =  BytePair() 
-        self.encoder = Encoder()
+        self.encoder = HuffmanEncoder()
         self.leaves = None
         self.bitToSeq = {}
         self.seqToBit = {}
@@ -16,10 +16,10 @@ class main:
         with open(src,'r') as some:
             file = some.read()
 
-        tokens = self.bp.tokenize(file,500)
+        tokens = self.bp.tokenize(file,300)
         stats = self.bp.get_single_stats(tokens)
 
-        probs = Encoder().generate_probs(stats)
+        probs = HuffmanEncoder().generate_probs(stats)
 
         self.encoder.build_tree(probs.keys(),probs.values())
         self.leaves = self.encoder.generate_encoding()
@@ -50,12 +50,36 @@ class main:
 
 
     
-    def encode(file):
-        pass 
+    def encode(self,file):
+        binary = ""
+        curString = ""
+        max_index = len(file)
+        i = 0
+        while i < max_index:
+            curString += file[i]
+            if curString in self.seqToBit.keys():
+                binary += self.seqToBit[curString]
+                curString = ""
+
+            i += 1
+        
+        return binary
 
 
-    def decode(bits):
-        pass
+    def decode(self,binary):
+        sequence = ""
+        curSeq = ""
+        max_index = len(binary)
+        i = 0
+        while i < max_index:
+            curSeq += binary[i]
+            if curSeq in self.bitToSeq.keys():
+                sequence += self.bitToSeq[curSeq]
+                curSeq = ""
+
+            i += 1
+        
+        return sequence
 
 
 
@@ -63,7 +87,13 @@ if __name__ == "__main__":
     m = main()
     m.generate_encoding(src="some.txt")
     m.set_lookup_table()
-    print(m.seqToBit.keys())
+    with open("some.txt",'r') as some:
+        file = some.read()
+        binary = m.encode(file)
+        print(binary)
+        print(m.decode(binary))
+
+
 
 
 
