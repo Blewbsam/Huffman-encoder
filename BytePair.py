@@ -1,8 +1,8 @@
 
 
-class BytePair:
-    # Performs BytePairing given a file and records merges in specific lookup table
-    # implementation of BytePair was taken from https://github.com/karpathy/minbpe/blob/master/minbpe/base.py
+class BytePairEncoding:
+    # Performs BytePairEncodinging given a file and records merges in specific lookup table
+    # implementation of BytePairEncoding was taken from https://github.com/karpathy/minbpe/blob/master/minbpe/base.py
 
     def __init__(self):
         self.PairToToken = {} #pair token to new token mapping
