@@ -13,7 +13,6 @@ class HuffmanEncoder:
         for k,v in stats.items():
             probs[Leaf(k)] = v/totalFrequency
 
-        print(sum(probs.values()))
         return probs
 
 
@@ -32,6 +31,7 @@ class HuffmanEncoder:
             lowerProb = currentProbs.pop(lower_index_min)
             lowerNode = currentNodes.pop(lower_index_min)
 
+
             newNode = Node(upperNode,lowerNode)
             newNodeProb = upperProb + lowerProb
 
@@ -39,10 +39,10 @@ class HuffmanEncoder:
             currentNodes.append(newNode)
             currentProbs.append(newNodeProb)
 
-            if newNodeProb == 1:
+            if newNodeProb > 0.99999:
                 break
         
-        assert currentProbs[0] == 1 # total prob must add upto one
+        assert currentProbs[0] > 0.99999 # total prob must add upto one
         self.srcNode = currentNodes[0]
 
 
@@ -82,9 +82,9 @@ class Shannon:
         return ent
     
     def expected_length(codeProbs = dict):
-        encodings = codeProbs.keys()
+        # codeProbs is a dict with keys of huffman encodings and values of associated probability
         l = 0
-        for e in encodings:
-            l += len(e.encoding) * codeProbs[e]
+        for node, prob in codeProbs.items():
+            l += len(node.encoding) * prob
         
         return l

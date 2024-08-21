@@ -1,10 +1,10 @@
 from BytePair import BytePairEncoding
-from huffman import HuffmanEncoder
-
+from huffman import HuffmanEncoder, Shannon
 
 class Encoder:
 
-    def __init__(self) -> None:
+    def __init__(self, numEmbeddings) -> None:
+        self.numEmbeddings = numEmbeddings
         self.bp =  BytePairEncoding() 
         self.encoder = HuffmanEncoder()
         self.leaves = None
@@ -18,7 +18,7 @@ class Encoder:
         with open(src,'r') as some:
             file = some.read()
 
-        tokens = self.bp.tokenize(file,500)
+        tokens = self.bp.tokenize(file,self.numEmbeddings)
         stats = self.bp.get_single_stats(tokens)
 
         self.probs = HuffmanEncoder().generate_probs(stats)
@@ -97,4 +97,4 @@ class Encoder:
         return Shannon.entropy(self.probs.values())
 
     def getExpectedLength(self):
-        pass
+        return Shannon.expected_length(self.probs)

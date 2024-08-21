@@ -56,7 +56,7 @@ class BytePairEncoding:
             stats = self.get_pair_stats(tokens)
             curPair = max(stats, key=stats.get)
             newToken = 256 + i 
-            print(f"Merging {curPair} into new token {newToken}.")
+            # print(f"Merging {curPair} into new token {newToken}.")
             tokens = self.merge(tokens,curPair,newToken)
             merges[curPair] = newToken
 
